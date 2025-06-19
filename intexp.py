@@ -2,20 +2,20 @@
 from abc import ABC, abstractmethod
 from datatypes import State
 
-class Intexp(ABC):
+class IntExp(ABC):
     # Sintaxis abstracta de expresiones enteras
     @abstractmethod
     def run(self, state: State) -> int:
         pass
     
-class Num(Intexp):
+class Num(IntExp):
     def __init__(self, value: int):
         self.value = value
 
     def run(self, state: State):
         return self.value
 
-class Var(Intexp):
+class Var(IntExp):
     def __init__(self, name: str):
         self.name = str(name)
     # Decisión de diseño: si la variable no está definida, 
@@ -25,38 +25,38 @@ class Var(Intexp):
             state[self.name] = 0
         return state[self.name]
     
-class Neg(Intexp):
-    def __init__(self, exp: Intexp):
+class Neg(IntExp):
+    def __init__(self, exp: IntExp):
         self.exp = exp
     def run(self, state: State):
         return -self.exp.run(state)
     
-class Plus(Intexp):
+class Plus(IntExp):
     def __init__(self, e1, e2):
         self.e1, self.e2 = e1, e2
     def run(self, state: State):
         return self.e1.run(state) + self.e2.run(state)
     
-class Sub(Intexp):
+class Sub(IntExp):
     def __init__(self, e1, e2):
         self.e1, self.e2 = e1, e2
     def run(self, state: State):
         return self.e1.run(state) - self.e2.run(state)
     
-class Mul(Intexp):
+class Mul(IntExp):
     def __init__(self, e1, e2):
         self.e1, self.e2 = e1, e2
     def run(self, state: State):
         return self.e1.run(state) * self.e2.run(state)
     
-class Div(Intexp):
+class Div(IntExp):
     # división entera
     def __init__(self, e1, e2):
         self.e1, self.e2 = e1, e2
     def run(self, state: State):
         return self.e1.run(state) // self.e2.run(state)
     
-class Mod(Intexp):
+class Mod(IntExp):
     # módulo
     def __init__(self, e1, e2):
         self.e1, self.e2 = e1, e2
