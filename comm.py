@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from datatypes import State, Omega
 from intexp import IntExp
 from boolexp import BoolExp
+from utils import estrella, cruz
 
 class Comm(ABC):
     """
@@ -75,12 +76,6 @@ class Input(Comm):
         # Como sólo usos un input a la vez, la cola queda vacía
         return Omega("normal", new_state, out)
 
-def estrella(om: Omega, comm: Comm) -> Omega:
-    # Función de transferencia de control. Propagación de error
-    if om.status == "abort":
-        return om
-    return comm.run(om.state, om.out)
-
 class Seq(Comm):
     def __init__(self, c0: Comm, c1: Comm):
         self.c0, self.c1 = c0, c1
@@ -88,12 +83,6 @@ class Seq(Comm):
     def run(self, state, out):
         return estrella(self.c0.run(state, out), self.c1)
     
-def cruz(om: Omega, comm: Comm) -> Omega:
-    # Función de transferencia de control para catchin. Dual de estrella
-    if om.status == "normal":
-        return om
-    return comm.run(om.state, om.out)
-
 class Catchin(Comm):
     def __init__(self, c0: Comm, c1: Comm):
         self.c0, self.c1 = c0, c1
@@ -130,7 +119,7 @@ class NewVar(Comm):
         temp_state[self.var] = self.expr.run(state)
 
         om = self.c.run(temp_state, out)
-        # 
+        # creo estado recuperado
         restored = State(om.state)
         if old is None:
             # si no existía antes, la elimino del estado
