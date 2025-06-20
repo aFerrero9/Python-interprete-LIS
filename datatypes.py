@@ -19,5 +19,4 @@ class Omega:
         self.status = status  # "normal" o "abort"
         self.state = state    # estado actual
         self.out = out        # lista acumulada
-    # EXTENDER CON F DE TRANSFERENCIA DE CONTROL
 
