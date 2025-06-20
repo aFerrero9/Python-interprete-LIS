@@ -76,6 +76,21 @@ class Input(Comm):
         # Como sólo usos un input a la vez, la cola queda vacía
         return Omega("normal", new_state, out)
 
+
+# Funciones de transferencia de control
+def estrella(om: Omega, comm: Comm) -> Omega:
+    # Función de transferencia de control. Propagación de error
+    if om.status == "abort":
+        return om
+    return comm.run(om.state, om.out)
+
+def cruz(om: Omega, comm: Comm) -> Omega:
+    # Función de transferencia de control para catchin. Dual de estrella
+    if om.status == "normal":
+        return om
+    return comm.run(om.state, om.out)
+
+
 class Seq(Comm):
     def __init__(self, c0: Comm, c1: Comm):
         self.c0, self.c1 = c0, c1
