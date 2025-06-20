@@ -3,7 +3,6 @@ from abc import ABC, abstractmethod
 from datatypes import State, Omega
 from intexp import IntExp
 from boolexp import BoolExp
-from utils import estrella, cruz
 
 class Comm(ABC):
     """
